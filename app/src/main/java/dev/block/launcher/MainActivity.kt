@@ -149,10 +149,10 @@ class MainActivity : Activity() {
   }; dialog.show()
  }
  private fun settings() {
-  text("НАСТРОЙКИ И ВЕРСИИ")
-  text("Minecraft: ${version() ?: "не найден"}
-Лаунчер: 1.0")
-  text("На Android сторонний лаунчер не может менять RAM, графику и аккаунт Minecraft. Эти параметры настраиваются в игре. Переключение версий здесь не поддерживается.")
+  private fun settings() {
+ text("НАСТРОЙКИ И ВЕРСИИ")
+ text("Minecraft: " + (version() ?: "не найден") + "\nЛаунчер: 1.0")
+ text("На Android сторонний лаунчер не может менять RAM, графику и аккаунт Minecraft. Эти параметры настраиваются в игре. Переключение версий здесь не поддерживается.")
   act("Настройки приложения Minecraft") { try { startActivity(Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,Uri.parse("package:$game"))) } catch (_: Exception) { toast("Настройки недоступны") } }
   act("Очистить копии импортированных файлов") {
    if(busy) toast("Дождись завершения копирования") else AlertDialog.Builder(this).setMessage("Убедись, что Minecraft закончил импорт. Удалить временные копии? Исходные файлы сохранятся.").setPositiveButton("Очистить") { _,_ -> File(cacheDir,"imports").listFiles()?.forEach { it.delete() }; toast("Кэш очищен") }.setNegativeButton("Отмена",null).show()
