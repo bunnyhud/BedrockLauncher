@@ -10,7 +10,6 @@ import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
-import android.view.Gravity
 import android.widget.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -127,23 +126,34 @@ class MainActivity : Activity() {
         text("ВЕРСИИ MINECRAFT")
         text("Выберите версию для скачивания или запуска.")
         
-        // Пример карточки версии
         val card = column().apply { background = panel(panelBg); setPadding(dp(8), dp(8), dp(8), dp(8)); setMargins(0, dp(4), 0, dp(4)) }
         card.addView(label("Bedrock 1.20.80", 18f, true))
+        
         val row = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
-        row.addView(Button(this).apply { 
-            text = "Скачать"; isAllCaps = false; setTextColor(Color.WHITE); background = panel(green)
+        
+        val btnDownload = Button(this).apply { 
+            text = "Скачать"
+            isAllCaps = false
+            setTextColor(Color.WHITE)
+            background = panel(green)
             layoutParams = LinearLayout.LayoutParams(0, dp(40), 1f).apply { setMargins(0, 0, dp(4), 0) }
             setOnClickListener { openUrl("https://www.google.com/search?q=download+minecraft+bedrock+1.20.80+apk") }
-        })
-        row.addView(Button(this).apply { 
-            text = "Запустить"; isAllCaps = false; setTextColor(Color.WHITE); background = panel(btnGray)
+        }
+        row.addView(btnDownload)
+        
+        val btnLaunch = Button(this).apply { 
+            text = "Запустить"
+            isAllCaps = false
+            setTextColor(Color.WHITE)
+            background = panel(btnGray)
             layoutParams = LinearLayout.LayoutParams(0, dp(40), 1f).apply { setMargins(dp(4), 0, 0, 0) }
             setOnClickListener { 
                 val intent = packageManager.getLaunchIntentForPackage(game)
                 if(intent != null) startActivity(intent) else toast("Эта версия не установлена")
             }
-        })
+        }
+        row.addView(btnLaunch)
+        
         card.addView(row)
         body.addView(card)
         
