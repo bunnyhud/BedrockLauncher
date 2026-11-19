@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+ <queries><package android:name="com.mojang.minecraftpe"/><intent><action android:name="android.intent.action.VIEW"/><data android:scheme="minecraft"/></intent></queries>
+ <application android:label="Block Launcher" android:theme="@android:style/Theme.Material.NoActionBar" android:allowBackup="false" android:supportsRtl="true">
+ <activity android:name=".MainActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity>
+ <provider android:name=".ImportProvider" android:authorities="dev.block.launcher.imports" android:exported="false" android:grantUriPermissions="true"/>
+ </application>
+</manifest>

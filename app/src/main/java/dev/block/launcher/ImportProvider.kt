@@ -1,0 +1,33 @@
+package dev.block.launcher
+
+import android.content.ContentProvider
+import android.content.ContentValues
+import android.database.Cursor
+import android.database.MatrixCursor
+import android.net.Uri
+import android.os.ParcelFileDescriptor
+import android.provider.OpenableColumns
+import java.io.File
+
+class ImportProvider : ContentProvider() {
+ override fun onCreate() = true
+ private fun file(uri: Uri): File {
+  val dir = File(requireNotNull(context).cacheDir, "imports").canonicalFile
+  val f = File(dir, uri.lastPathSegment ?: "").canonicalFile
+  require(f.parentFile == dir && f.isFile) { "Invalid import" }
+  return f
+ }
+ override fun getType(uri: Uri) = "application/octet-stream"
+ override fun openFile(uri: Uri, mode: String): ParcelFileDescriptor {
+  require(mode == "r")
+  return ParcelFileDescriptor.open(file(uri), ParcelFileDescriptor.MODE_READ_ONLY)
+ }
+ override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor {
+  val f = file(uri)
+  val cols = projection ?: arrayOf(OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE)
+  return MatrixCursor(cols).apply { addRow(cols.map { when(it) { OpenableColumns.DISPLAY_NAME -> f.name; OpenableColumns.SIZE -> f.length(); else -> null } }.toTypedArray()) }
+ }
+ override fun insert(uri: Uri, values: ContentValues?): Uri? = throw UnsupportedOperationException()
+ override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int = throw UnsupportedOperationException()
+ override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int = throw UnsupportedOperationException()
+}
